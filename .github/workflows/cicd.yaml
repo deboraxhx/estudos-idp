@@ -11,21 +11,33 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Shorten commit id
+      # 1. Checkout do código: Essencial para acessar seus arquivos, incluindo o Dockerfile.
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Configurar Docker Buildx: Necessário para a build-push-action.
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 3. Shorten commit id: Corrigida a sintaxe da substring.
+      - name: Shorten commit id
         shell: bash
         run: |
-          echo "COMMIT_ID=${$GITHUB_SHA::6}" >> "$GITHUB_ENV"
+          echo "COMMIT_ID=${GITHUB_SHA::6}" >> "$GITHUB_ENV" # CORRIGIDO AQUI
 
-      -
-        name: Login to Docker Hub
+      # 4. Login no Docker Hub
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push
+
+      # 5. Build e Push
+      - name: Build and push
         uses: docker/build-push-action@v6
         with:
           push: true
           tags: deboraxhx/python-app:${{ env.COMMIT_ID }}
+          # Opcional: Se seu Dockerfile não estiver na raiz do repo ou seu contexto de build for 'src'
+          # context: ./src # Exemplo: se o Dockerfile estiver dentro de 'src'
+          # file: ./src/Dockerfile # Exemplo: se o Dockerfile estiver dentro de 'src' e se chamar 'Dockerfile'
