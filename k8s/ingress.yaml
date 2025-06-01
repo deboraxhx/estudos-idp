@@ -2,15 +2,15 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: python-app
+  # namespace: default # Descomente e ajuste se o seu namespace não for 'default'
 spec:
   rules:
-  - host: "python-app.test.com"
-    http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: python-app
-              port:
-                number: 8080
+  - http: # O hífen aqui indica que 'rules' é uma lista, e este é o primeiro item.
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: python-app
+            port:
+              number: 8080
