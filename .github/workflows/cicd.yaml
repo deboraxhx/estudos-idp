@@ -9,7 +9,7 @@ on:
 
 jobs:
   docker:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       # 1. Checkout do código: Essencial para acessar seus arquivos, incluindo o Dockerfile.
       - name: Checkout code
